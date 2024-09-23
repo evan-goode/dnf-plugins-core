@@ -116,10 +116,12 @@ class BootcCommand(dnf.cli.Command):
         proc = subprocess.Popen(
             self.extargs, stdout=subprocess.PIPE, stderr=subprocess.STDOUT
         )
-        output = proc.communicate()
+        (proc_stdout, proc_stderr) = proc.communicate()
 
         if proc.returncode != 0:
-            logger.critical(output)
+            logger.critical(proc_stdout.decode())
+            logger.critical(proc_stderr.decode())
             raise dnf.cli.CliError
         else:
-            logger.info(output)
+            logger.info(proc_stdout.decode())
+            logger.info(proc_stderr.decode())
